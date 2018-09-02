@@ -41,7 +41,6 @@ const email = function(options){
         this.createLog();
         const _this = this;
 
-        /*
         nodemailer.createTestAccount(function(err, account){
             let transporter = nodemailer.createTransport({
                 host: 'smtp.gmail.com',
@@ -72,7 +71,6 @@ const email = function(options){
                 this.createLog();
             });
         });
-        */
         
 
     }
