@@ -15,8 +15,7 @@ const CONFIG = {
         cc : ""
     },
     git : {
-        // email : "..git.global.email@email.com", /* for check : git config --global user.email */
-        email : "...git.email@email.com", /* for check : git config --global user.email */
+        email : "..git.global@email.com", /* for check : git config --global user.email */
         ignore : [ /* Remove if find word */
             "Merge branch +(.){0,3}",
             "(F|f)(.)ck|m(.)mek|k(o|a|(.))ntol|(.)babi(.)|(.)jancok(.)|(T|t)ai(.)",
