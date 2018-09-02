@@ -1,0 +1,17 @@
+{
+  "name": "send-email-by-commit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Send Email Base On Commit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "indaam indaam@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.22.2",
+    "nodemailer": "^4.6.7",
+    "prompt": "^1.0.0"
+  }
+}
