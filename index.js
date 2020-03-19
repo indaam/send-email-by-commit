@@ -41,14 +41,18 @@ const daily = function(app){
 
     this.sendEmail = function(password) {
         this.app.CONFIG["email"]["password"] = password;
-        const email = new this.app.email({
+        var data = {
             data: this.getCommit(),
             helper: this.app.helper(),
             config: this.app.CONFIG,
             fs : this.app.libs.fs,
             nodemailer : this.app.libs.nodemailer
-        });
-        email.send();
+        };
+
+        console.log(data);
+        // console.log()
+        // const email = new this.app.email(data);
+        // email.send();
     }
 
     this.init = function() {

@@ -10,12 +10,12 @@ const CONFIG = {
         task : ["Creta a new project", "Setup server"]
     },
     email : {
-        from : "...emai.from@email.com",
-        to : "...send.to@email.com",
+        from : "indaam@gmail.com",
+        to : "irham@aleph-labs.com",
         cc : ""
     },
     git : {
-        email : "..git.global@email.com", /* for check : git config --global user.email */
+        email : "indaam@email.com", /* for check : git config --global user.email */
         ignore : [ /* Remove if find word */
             "Merge branch +(.){0,3}",
             "(F|f)(.)ck|m(.)mek|k(o|a|(.))ntol|(.)babi(.)|(.)jancok(.)|(T|t)ai(.)",
