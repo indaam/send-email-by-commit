@@ -79,80 +79,55 @@ const commit = function(options){
             from : "",
 			to : "",
 			cc : "",
-			subject : "",
-			content : {
-				date : {
+            subject : "",
+            header : {
+                date : {
 					title : "Date: ",
 					data : ""
 				},
 				timeIn : {
 					title : "Time In : ",
 					data : ""
-				},
-				timeOut : {
+                },
+                timeOut : {
 					title : "Time Out : ",
 					data : ""
-				},
-				taskAssigned : {
-					title : "Task Assigned: ",
-					data : []	
-				},
-				taskCompleted: {
-					title : "Task Completed: ",
-					data : []	
-				},
-				planForNextDay : {
-					title : "Plan for Next Day: ",
-					data : []	
-				},
-				healthyThingAchievedToday : {
-					title : "Healthy Thing Achieved Today:",
-					data : []	
-				},
-				anyIssuesFaced: {
-					title : "Any issues faced:",
-					data : []	
-				},
-				leavePlannedApproved: {
-					title : "Leave Planned / Approved:",
-					data : []	
-				},
-				gratitude : {
-					title : "Gratitude: ",
-					data : []	
-				},
-				blocker : {
-					title : "Blocker : ",
-					data : []	
-				}
-			}
+                },
+                status : {
+                    title : "Status : ",
+					data : `${this.config.base.status}`
+                }
+            }
 		}
 
         mockup["from"] = this.config.email.from;
         mockup["to"] = this.config.email.to;
 		mockup["cc"] = this.config.email.cc;
-		mockup["subject"] = "Daily Update " + this.moment(new Date()).format('DD MMMM YYYY');
-		mockup["content"]["date"]["data"] = this.moment(new Date()).format('DD MMM YYYY').toUpperCase();
-		mockup["content"]["timeIn"]["data"] = this.config.base.timeIn;
-		mockup["content"]["timeOut"]["data"] = this.config.base.timeOut;
-        mockup["content"]["taskAssigned"]["data"] = this.helper.createDataList(this.config.base.task);
-        mockup["content"]["taskCompleted"]["data"] = this.helper.createDataList(data);
+        mockup["subject"] = "Daily Update " + this.moment(new Date()).format('DD MMMM YYYY');
+        
+		mockup["header"]["date"]["data"] = this.moment(new Date()).format('DD MMM YYYY').toUpperCase();
+		mockup["header"]["timeIn"]["data"] = this.config.base.timeIn;
+        mockup["header"]["timeOut"]["data"] = this.moment(new Date()).format('HH:mm A').toUpperCase();
+
+        mockup["content"] = {...this.config.base.content};
+
+        mockup["content"]["taskCompleted"]["data"] = this.helper.createDataList(data, this.config.base.content.taskCompleted.data);
 
 		return mockup;
 	}
 
-	this.htmlMockup = function(data){
-		return this.helper.createHtmlMockup(data);
+	this.htmlMockup = function(jsonData){
+        return this.helper.createHtmlMockupUpdate(jsonData);
 	}
 
 	this.get = function(){
 		var commit = {};
-		commit.object = this.commitObject();
+        commit.object = this.commitObject();
 		commit.update = this.updateCommit();
         commit.today = this.getCommitToday(new Date());
 		commit.byEmail = this.getCommitByEmail(this.config.git.email);
         commit.json = this.jsonMockup(commit.byEmail);
-		commit.html = this.htmlMockup(commit.json.content);
+		commit.html = this.htmlMockup(commit.json);
 		return commit
 	}
 }

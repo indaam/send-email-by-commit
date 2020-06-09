@@ -1,17 +1,24 @@
 /**
  * Import app & libs
  */
-var a = require('./app/prompt');
+
+const child_process = require('child_process');
 
 let app = {
     commit  : require('./app/commit'),
     prompt  : require('./app/prompt'),
     helper  : require('./app/helper.js'),
     email   : require('./app/email'),
+    dir : {
+        root: String(process.cwd()).replace(/\s/g, '// '),
+        current: String(__dirname).replace(/\s/g, '// '),
+        app : ''
+    },
     libs    : {
+        child_process : child_process,
         fs          : require('fs'),
         moment      : require('moment'),
-        prompt      : require('prompt'),
+        prompt      : require('prompts'),
         nodemailer  : require('nodemailer'),
     }
 }
@@ -46,21 +53,31 @@ const daily = function(app){
             helper: this.app.helper(),
             config: this.app.CONFIG,
             fs : this.app.libs.fs,
-            nodemailer : this.app.libs.nodemailer
+            child_process : this.app.libs.child_process,
+            nodemailer : this.app.libs.nodemailer,
+            dir : this.app.dir
         };
 
-        console.log(data);
-        // console.log()
-        // const email = new this.app.email(data);
-        // email.send();
+        const email = new this.app.email(data);
+        email.send();
     }
 
     this.init = function() {
         const _this = this;
         console.log("Enter password for", this.app.CONFIG["email"]["from"]);
-        this.app.prompt(this.app.libs.prompt, function(error, result) {
-            if (error ){ console.log(error) }
-            _this.sendEmail(result.password);
+
+        const email = this.app.CONFIG["email"]["from"];
+        const password = this.app.CONFIG["email"]["password"];
+
+        if(password){
+            return _this.sendEmail(password);
+        }
+
+        return this.app.prompt(this.app.libs.prompt, email, function(error, result) {
+            if(!error){
+                return _this.sendEmail(result.password);
+            }
+            return null
         });
     }
 }
