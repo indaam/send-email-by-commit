@@ -27,7 +27,7 @@ var helper = function(){
         });
     }
 
-	helper.createDataList = function(data){
+	helper.createDataList = function(data, defaultData){
 		let arr = [];
         if ( data.length && typeof data[0] === "string" ) {
             for( let i in data){
@@ -37,6 +37,10 @@ var helper = function(){
             for( let i in data){
                 arr.push(data[i]["message"]);
             }            
+        }
+
+        if(!arr.length){
+            return defaultData;
         }
 
 		return arr;
@@ -75,7 +79,7 @@ var helper = function(){
 	}
 
 	helper.createHtmlMockup = function(data){
-		let html = `<div dir="ltr">`;
+        let html = `<div dir="ltr">`;
 		for( let i in data){
 			if ( typeof data[i].data === "string") {
 				html += this.createHtmlTypeStr(data[i]);
@@ -84,9 +88,109 @@ var helper = function(){
 			}
 		}
 		html += `</div>`;
-
 		return html;
-	}
+    }
+
+    helper.createHeader = function(data){
+        const { date, timeIn, timeOut, status } = data.header;
+        return `
+            <tr style="height:21px">
+                <td style="border:1px solid #ccc;overflow:hidden;padding:2px 3px;vertical-align:top;font-weight:bold">
+                    <font face=".AppleSystemUIFont">${date.title}</font>
+                </td>
+                <td style="border-width:1px;border-style:solid;border-color:#ccc #ccc #ccc rgb(204,204,204);overflow:hidden;padding:2px 3px;vertical-align:middle;font-weight:bold">
+                    <font face=".AppleSystemUIFont">${date.data}</font>
+                </td>
+            </tr>
+            <tr style="height:21px">
+                <td style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) #ccc #ccc;overflow:hidden;padding:2px 3px;vertical-align:top;font-weight:bold">
+                    <font face=".AppleSystemUIFont">${timeIn.title}</font>
+                </td>
+                <td style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) #ccc #ccc rgb(204,204,204);overflow:hidden;padding:2px 3px;vertical-align:middle;font-weight:bold">
+                    <font face=".AppleSystemUIFont">${timeIn.data}</font>
+                </td>
+            </tr>
+            <tr style="height:21px">
+                <td style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) #ccc #ccc;overflow:hidden;padding:2px 3px;vertical-align:top;font-weight:bold">
+                    <font face=".AppleSystemUIFont">${timeOut.title}</font>
+                </td>
+                <td style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) #ccc #ccc rgb(204,204,204);overflow:hidden;padding:2px 3px;vertical-align:middle;font-weight:bold">${timeOut.data}</td>
+            </tr>
+            <tr style="height:21px">
+                <td style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) #ccc #ccc rgb(204,204,204);overflow:hidden;padding:2px 3px;vertical-align:top"></td>
+                <td style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) #ccc #ccc rgb(204,204,204);overflow:hidden;padding:2px 3px;vertical-align:bottom"></td>
+            </tr>
+            <tr style="height:21px">
+                <td style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) #ccc #ccc;overflow:hidden;padding:2px 3px;vertical-align:top;font-weight:bold">
+                    <font face=".AppleSystemUIFont">${status.title}</font>
+                </td>
+                <td style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) #ccc #ccc rgb(204,204,204);overflow:hidden;padding:2px 3px;vertical-align:bottom;font-weight:bold">
+                    <font face=".AppleSystemUIFont">
+                        <font color="#030004">${status.data}</font>
+                    </font>
+                </td>
+            </tr>
+            
+            <tr style="height:21px">
+                <td style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) #ccc #ccc rgb(204,204,204);overflow:hidden;padding:2px 3px;vertical-align:top"></td>
+                <td style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) #ccc #ccc rgb(204,204,204);overflow:hidden;padding:2px 3px;vertical-align:bottom"></td>
+            </tr>
+    `;
+    }
+
+
+    helper.createContentListsUl = function (data) {
+        let ol = `<ul style="margin-top: 12px">`;
+        for (let index = 0; index < data.length; index++) {
+            const element = data[index];
+            ol+= `<li>${element}</li>`;
+        }
+        ol+= `</ul>`;
+        return ol;
+    }
+
+    helper.createContentLists = function (data) {
+        if(data && data.data && data.data.length){
+            return `
+            <tr style="height:21px">
+                <td rowspan="1" colspan="2" style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) #ccc #ccc;overflow:hidden;padding:2px 3px;vertical-align:top;background-color:rgb(243,243,243);font-weight:bold">
+                    <font face=".AppleSystemUIFont">${data.title}</font>
+                </td>
+            </tr>
+            <tr style="height:21px">
+                <td rowspan="1" colspan="2" style="border-width:1px;border-style:solid;border-color:rgb(204,204,204) rgb(204,204,204) #ccc;overflow:hidden;padding:2px 3px;vertical-align:top">
+                    ${this.createContentListsUl(data.data)}
+                </td>
+            </tr>
+        `;
+        }
+        return '';
+    }
+
+    helper.createContent = function (data) {
+        const { content } = data;
+        let html = '';
+
+		for( let k in content){
+            let d = content[k];
+            d["id"] = k;
+            html += this.createContentLists(d);
+        }
+        return html;
+    }
+
+	helper.createHtmlMockupUpdate = function(data){
+        let html = `<div dir="ltr"><div><font face=".AppleSystemUIFont"><b>The&nbsp;Daily&nbsp;Journal:<br></b></font><br/></div><table cellspacing="0" cellpadding="0" dir="ltr" border="1" style="table-layout:fixed;width:100%;max-width:600px;border-collapse:collapse;border:none"><tbody>`;
+        let header = helper.createHeader(data);
+        let content = helper.createContent(data);
+
+        html+= (header + content);
+        html += `</tbody></table><font style="font-size: 7px" face=".AppleSystemUIFont">Generator : <a href="https://github.com/indaam/send-email-by-commit">Send email by commit</a></font></div>`;
+		return html;
+    }
+    
+
+
 
 	return helper
 }
