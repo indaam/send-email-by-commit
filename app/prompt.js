@@ -4,23 +4,33 @@
  * @constructor
  * @param prompt
  * @param {func} func after get prompt 
- * @rev https://www.npmjs.com/package/prompt
+ * @rev https://www.npmjs.com/package/prompts
  */
 
-const prompInit = function(prompt, callback){
-    prompt.start();
-    prompt.get([{
+const prompInit = function(prompt, email, callback){
+
+    var questions = [{
+        type: 'password',
         name: 'password',
-        hidden: true,
-        replace: '*',
-        conform: function(value) {
-            return true;
-        }
-    }], function(err, result) {
+        message: 'Enter password for ' + email
+    }]
+    prompt(questions).then( res => {
         if ( callback && typeof callback === 'function') {
-            callback(err, result);
+            if(res && res.password){
+                callback(false, res);
+            }else{
+                callback(true, res);
+            }
         }
-    });
+        // console.log(res);
+    }).catch ( e => {
+        if ( callback && typeof callback === 'function') {
+            callback({
+                error : 1,
+                message : e
+            }, res);
+        }
+    })
 }
 
 module.exports = prompInit
