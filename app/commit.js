@@ -72,50 +72,33 @@ const commit = function(options){
 				return data
 			}
 		});
-	}
-
-	this.jsonMockup = function(data){
-		let mockup = {
-            from : "",
-			to : "",
-			cc : "",
-            subject : "",
-            header : {
-                date : {
-					title : "Date: ",
-					data : ""
-				},
-				timeIn : {
-					title : "Time In : ",
-					data : ""
-                },
-                timeOut : {
-					title : "Time Out : ",
-					data : ""
-                },
-                status : {
-                    title : "Status : ",
-					data : `${this.config.base.status}`
-                }
+    }
+    
+    this.getTimeFormat = function(text){
+        try {
+            const timeFormat = String(text).split("{{");
+            return {
+                text : timeFormat[0], 
+                format : timeFormat[1].replace("}}", "")
             }
-		}
+        } catch (error) {
+            throw "Invalid time format example : {{DD MMM YYYY}}"
+        }
+    }
 
-        mockup["from"] = this.config.email.from;
-        mockup["to"] = this.config.email.to;
-		mockup["cc"] = this.config.email.cc;
-        mockup["subject"] = "Daily Update " + this.moment(new Date()).format('DD MMMM YYYY');
-        
-		mockup["header"]["date"]["data"] = this.moment(new Date()).format('DD MMM YYYY').toUpperCase();
-		mockup["header"]["timeIn"]["data"] = this.config.base.timeIn;
-        mockup["header"]["timeOut"]["data"] = this.moment(new Date()).format('HH:mm A').toUpperCase();
-
-        mockup["content"] = {...this.config.base.content};
-
-        mockup["content"]["taskCompleted"]["data"] = this.helper.createDataList(data, this.config.base.content.taskCompleted.data);
-
-		return mockup;
-	}
-
+	this.jsonMockup = function(data, config){
+        let mockup = {...config.email};
+        const subjectTimeFormat = this.getTimeFormat(config.email.send.subject);
+        const dateTimeFormat = this.getTimeFormat(config.email.body.header.date.data);
+        const timeOutTimeFormat = this.getTimeFormat(config.email.body.header.timeOut.data);
+        delete mockup.auth;
+        mockup["send"]["subject"] = subjectTimeFormat.text + this.moment(new Date()).format(subjectTimeFormat.format);
+        mockup["body"]["header"]["date"]["data"] = this.moment(new Date()).format(dateTimeFormat.format);
+        mockup["body"]["header"]["timeOut"]["data"] = this.moment(new Date()).format(timeOutTimeFormat.format);
+        mockup["body"]["content"]["taskCompleted"]["data"] = this.helper.createDataList(data, config.email.body.content.taskCompleted.data);
+        return mockup;
+    }
+    
 	this.htmlMockup = function(jsonData){
         return this.helper.createHtmlMockupUpdate(jsonData);
 	}
@@ -126,7 +109,7 @@ const commit = function(options){
 		commit.update = this.updateCommit();
         commit.today = this.getCommitToday(new Date());
 		commit.byEmail = this.getCommitByEmail(this.config.git.email);
-        commit.json = this.jsonMockup(commit.byEmail);
+        commit.json = this.jsonMockup(commit.byEmail, this.config);
 		commit.html = this.htmlMockup(commit.json);
 		return commit
 	}
