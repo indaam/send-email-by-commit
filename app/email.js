@@ -49,8 +49,9 @@ const email = function(options){
 
     this.send = function(){
         const _this = this;
-        console.log("this.config", this.config);
-        const { autosend } = this.config.email;
+
+        const printLog = this.config.log.print;
+        const  autosend  = this.config.email.send.autosend;
         if(autosend){
             return nodemailer.createTestAccount(function(err, account){
                 let transporter = nodemailer.createTransport({
@@ -58,33 +59,37 @@ const email = function(options){
                     port: 465,
                     secure: true, // true for 465, false for other ports
                     auth: {
-                        user: _this.config.email.user, // generated ethereal user
-                        pass: _this.config.email.password // generated ethereal password
+                        user: _this.config.email.auth.user, // generated ethereal user
+                        pass: _this.config.email.auth.password // generated ethereal password
                     }
                 });
     
                 let mailOptions = {
-                    from: '<'+ _this.config.email.user +'>',
-                    to: _this.data.json.to,
-                    subject: _this.data.json.subject,
+                    from: '<'+ _this.config.email.auth.user +'>',
+                    to: _this.data.json.send.to,
+                    subject: _this.data.json.send.subject,
                     html: _this.data.html
                 };
     
-                if( _this.config.email.cc ){
-                    mailOptions["cc"] = _this.config.email.cc;
+                if( _this.data.json.send.cc ){
+                    mailOptions["cc"] = _this.data.json.send.cc;
                 }
-    
+
                 transporter.sendMail(mailOptions, function(error, info){
                     if (error) {
                         return console.log(error);
                     }
                     console.log('Message sent: %s', info.messageId);
-                    this.createLog(false);
+                    if(printLog){
+                        this.createLog(false);
+                    }
                 });
             });
         }
-        console.log("Open preview");
-        this.createLog(true);
+        if(printLog){
+            console.log("Open preview");
+            this.createLog(true);
+        }
         return null;
     }
 }
