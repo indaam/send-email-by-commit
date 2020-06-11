@@ -32,7 +32,7 @@ const email = function(options){
 
         if(openBrowser){
             return this.child_process.exec(`open -a "Google Chrome" ${logLocation[0]}`, (err, stdout, stderr) => {
-                console.log("stdout", stdout)
+                // console.log("stdout", stdout)
             });
         }
     }

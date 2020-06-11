@@ -27,14 +27,13 @@ let app = {
 /**
  * Get config
  */
-app["CONFIG"] = require('./config')
-// app["CONFIG"] = require('./indaam.config.js')
+app["CONFIG"] = app.helper().createConfig(app);
 
 /**
  * daily App
  * @constructor
  */
-const daily = function(app){
+const Daily = function(app){
     this.app = app;
 
     this.getCommit = function() {
@@ -46,8 +45,8 @@ const daily = function(app){
         return commit.get();
     }
 
-    this.sendEmail = function(password) {
-        this.app.CONFIG["email"]["password"] = password;
+    this.sendEmail = function(password, autoSend) {
+        this.app.CONFIG["email"]["auth"]["password"] = password;
         var data = {
             data: this.getCommit(),
             helper: this.app.helper(),
@@ -55,7 +54,8 @@ const daily = function(app){
             fs : this.app.libs.fs,
             child_process : this.app.libs.child_process,
             nodemailer : this.app.libs.nodemailer,
-            dir : this.app.dir
+            dir : this.app.dir,
+            autoSend : autoSend
         };
 
         const email = new this.app.email(data);
@@ -64,18 +64,18 @@ const daily = function(app){
 
     this.init = function() {
         const _this = this;
-        console.log("Enter password for", this.app.CONFIG["email"]["from"]);
 
-        const email = this.app.CONFIG["email"]["from"];
-        const password = this.app.CONFIG["email"]["password"];
+        const email = _this.app.CONFIG.email.auth.user;
+        const password = _this.app.CONFIG.email.auth.password;
+        const autoSend = _this.app.CONFIG.email.send.autoSend;
 
         if(password){
-            return _this.sendEmail(password);
+            return _this.sendEmail(password, autoSend);
         }
 
         return this.app.prompt(this.app.libs.prompt, email, function(error, result) {
             if(!error){
-                return _this.sendEmail(result.password);
+                return _this.sendEmail(result.password, autoSend);
             }
             return null
         });
@@ -85,5 +85,5 @@ const daily = function(app){
 /**
  * Init
  */
-const Daily = new daily(app);
-Daily.init();
+const daily = new Daily(app);
+daily.init();
