@@ -59,7 +59,11 @@ const Daily = function(app){
         };
 
         const email = new this.app.email(data);
-        email.send();
+
+        if(autoSend){
+            return email.send();
+        }
+        return email.writeLog(true);
     }
 
     this.init = function() {
@@ -69,16 +73,21 @@ const Daily = function(app){
         const password = _this.app.CONFIG.email.auth.password;
         const autoSend = _this.app.CONFIG.email.send.autoSend;
 
-        if(password){
+        if(password && autoSend){
             return _this.sendEmail(password, autoSend);
         }
 
-        return this.app.prompt(this.app.libs.prompt, email, function(error, result) {
-            if(!error){
-                return _this.sendEmail(result.password, autoSend);
-            }
-            return null
-        });
+        if(autoSend){
+            return this.app.prompt(this.app.libs.prompt, email, function(error, result) {
+                if(!error){
+                    return _this.sendEmail(result.password, autoSend);
+                }
+                throw error
+            });
+        }
+
+        return _this.sendEmail(null, autoSend);
+
     }
 }
 

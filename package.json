@@ -1,15 +1,27 @@
 {
   "name": "send-email-by-commit",
-  "version": "1.0.0",
+  "title": "Daily email by commit",
+  "version": "1.0.1",
   "private": true,
   "description": "Send Email Base On Commit",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/indaam/send-email-by-commit.git",
+    "baseUrl": "https://github.com/indaam/send-email-by-commit"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "indaam indaam@gmail.com",
-  "license": "ISC",
-  "dependencies": {
+  "author": {
+    "name": "indaam",
+    "email": "indaam@gmail.com"
+  },
+  "keywords": [
+    "git", "email", "daily", "update"
+  ],
+  "license": "MIT",
+  "devDependencies": {
     "moment": "^2.24.0",
     "nodemailer": "^6.4.5",
     "prompts": "^2.3.2"

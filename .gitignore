@@ -3,3 +3,4 @@ node_modules
 indaam.config.js
 _log
 dailyLog
+daily.email.config.json

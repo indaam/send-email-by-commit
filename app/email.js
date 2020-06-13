@@ -51,46 +51,37 @@ const email = function(options){
         const _this = this;
 
         const printLog = this.config.log.print;
-        const  autosend  = this.config.email.send.autosend;
-        if(autosend){
-            return nodemailer.createTestAccount(function(err, account){
-                let transporter = nodemailer.createTransport({
-                    host: 'smtp.gmail.com',
-                    port: 465,
-                    secure: true, // true for 465, false for other ports
-                    auth: {
-                        user: _this.config.email.auth.user, // generated ethereal user
-                        pass: _this.config.email.auth.password // generated ethereal password
-                    }
-                });
-    
-                let mailOptions = {
-                    from: '<'+ _this.config.email.auth.user +'>',
-                    to: _this.data.json.send.to,
-                    subject: _this.data.json.send.subject,
-                    html: _this.data.html
-                };
-    
-                if( _this.data.json.send.cc ){
-                    mailOptions["cc"] = _this.data.json.send.cc;
+        // const  autosend  = this.config.email.send.autosend;
+        return nodemailer.createTestAccount(function(err, account){
+            let transporter = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true, // true for 465, false for other ports
+                auth: {
+                    user: _this.config.email.auth.user, // generated ethereal user
+                    pass: _this.config.email.auth.password // generated ethereal password
                 }
-
-                transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                        return console.log(error);
-                    }
-                    console.log('Message sent: %s', info.messageId);
-                    if(printLog){
-                        this.createLog(false);
-                    }
-                });
             });
-        }
-        if(printLog){
-            console.log("Open preview");
-            this.createLog(true);
-        }
-        return null;
+
+            let mailOptions = {
+                from: '<'+ _this.config.email.auth.user +'>',
+                to: _this.data.json.send.to,
+                subject: _this.data.json.send.subject,
+                html: _this.data.html
+            };
+
+            if( _this.data.json.send.cc ){
+                mailOptions["cc"] = _this.data.json.send.cc;
+            }
+
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    return console.log(error);
+                }
+                console.log('Message sent: %s', info.messageId);
+                this.createLog(true);
+            });
+        });
     }
 }
 
