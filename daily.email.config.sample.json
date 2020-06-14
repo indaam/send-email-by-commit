@@ -33,7 +33,7 @@
             "content": {
                 "taskAssigned": {
                     "title": "Task Assigned: ",
-                    "data": ["Mokita Mobile Apps"]
+                    "data": ["Project name"]
                 },
                 "taskCompleted": {
                     "title": "Task Completed: ",

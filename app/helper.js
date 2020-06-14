@@ -192,11 +192,29 @@ var helper = function(){
         return openWrapper + title + openTable + header + space + content + closeTable + credit + closeWrapper;
     }
 
+    helper.defaulConfig = function(app){
+        const { libs, dir } = app;
+        try {
+            const configFile = `${dir.current}/daily.email.config.sample.json`;
+            const configFileContent = libs.fs.readFileSync(configFile, 'utf8');
+            return JSON.parse(configFileContent);
+        }catch (e){
+            throw "Config not found, please read docs: https://github.com/indaam/send-email-by-commit";
+        }
+
+    }
+
     helper.createConfig = function(app){
         const { libs, dir } = app;
-        const configFile = `${dir.root}/daily.email.config.json`;
-        const configFileContent = libs.fs.readFileSync(configFile, 'utf8');
-        return JSON.parse(configFileContent);
+        try {
+            const configFile = `${dir.root}/daily.email.config.json`;
+            const configFileContent = libs.fs.readFileSync(configFile, 'utf8');
+            return JSON.parse(configFileContent);
+        }catch (e){
+            console.log("Use default config, please read docs: https://github.com/indaam/send-email-by-commit")
+            return helper.defaulConfig(app);
+        }
+
     }
 	return helper
 }

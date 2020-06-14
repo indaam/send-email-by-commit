@@ -1,8 +1,7 @@
 {
   "name": "send-email-by-commit",
   "title": "Daily email by commit",
-  "version": "1.0.1",
-  "private": true,
+  "version": "1.0.3",
   "description": "Send Email Base On Commit",
   "main": "index.js",
   "repository": {
@@ -18,10 +17,10 @@
     "email": "indaam@gmail.com"
   },
   "keywords": [
-    "git", "email", "daily", "update"
+    "git", "email", "daily", "update", "report"
   ],
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "moment": "^2.24.0",
     "nodemailer": "^6.4.5",
     "prompts": "^2.3.2"

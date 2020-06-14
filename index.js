@@ -63,7 +63,7 @@ const Daily = function(app){
         if(autoSend){
             return email.send();
         }
-        return email.writeLog(true);
+        return email.createLog(true);
     }
 
     this.init = function() {
@@ -71,7 +71,7 @@ const Daily = function(app){
 
         const email = _this.app.CONFIG.email.auth.user;
         const password = _this.app.CONFIG.email.auth.password;
-        const autoSend = _this.app.CONFIG.email.send.autoSend;
+        const autoSend = _this.app.CONFIG.email.send.autosend;
 
         if(password && autoSend){
             return _this.sendEmail(password, autoSend);
