@@ -1,7 +1,7 @@
 {
   "name": "send-email-by-commit",
   "title": "Daily email by commit",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Send Email Base On Commit",
   "main": "index.js",
   "repository": {
@@ -15,6 +15,9 @@
   "author": {
     "name": "indaam",
     "email": "indaam@gmail.com"
+  },
+  "bin": {
+    "send-email-by-commit": "./bin/cli"
   },
   "keywords": [
     "git", "email", "daily", "update", "report"

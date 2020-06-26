@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+var dailyGenerator =  require('../generator');
+
+/**
+ * Run
+ */
+
+dailyGenerator.init();
