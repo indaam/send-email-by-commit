@@ -56,6 +56,7 @@ Basicly, this script get commit base on your email, so you need to set your git 
 ```
 ...
 "git": {
+    "getFrom" : 1, // Get commy by days from now
     "email": "your.git.email@mail.com", // replace with your local git email; To check user this => git config --global user.email 
     ...
 },
@@ -106,6 +107,15 @@ It's not good & very dangerous, canot la send report like that. By defaulr, I fi
     ]
 },
 ```
+
+## Change log 1.0.3
+* Initial Relase
+
+## Change log 1.0.4
+* Add CLI for support when install global
+* Update git config email, now can get commit by many email, settings like : `['email1@mail.com', 'email2@mail.com']`
+* NEW git config `getFrom`, now can get email by day from now, default 1; Also you can set 'today' for just get from 00:00 to 23.59
+* Add new awesome template, `v1` : by Nana Maulana
 
 ## Base on Hastag
 By default this application grab all commit start from 00.00 to 24.00.
