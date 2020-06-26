@@ -26,6 +26,17 @@ var helper = function(){
             }
         });
     }
+    helper.createTimestamp = function(date, moment){
+        var d = moment(new Date(date));
+        // console.log('d0', date);
+        // console.log('d1', new Date(date).getTime());
+        // console.log("d2", d.valueOf());
+        if(!!date){
+            var d = moment(new Date(date));
+            return d.valueOf();
+        }
+        throw "No date";
+    }
 
 	helper.createDataList = function(data, defaultData){
 		let arr = [];
@@ -92,8 +103,6 @@ var helper = function(){
     }
 
     helper.createHeader = function(data){
-
-
         const { header } = data;
         let html = '';
 
@@ -151,6 +160,15 @@ var helper = function(){
         return '';
     }
 
+    helper.chunkArray = (arr, chunkSize) => {
+        return [].concat.apply(
+          [],
+          arr.map((elem, i) => {
+            return i % chunkSize ? [] : [arr.slice(i, i + chunkSize)];
+          })
+        );
+      };
+
     helper.createContent = function (bodyData) {
         const { content } = bodyData;
         let html = '';
@@ -192,7 +210,7 @@ var helper = function(){
         return openWrapper + title + openTable + header + space + content + closeTable + credit + closeWrapper;
     }
 
-    helper.defaulConfig = function(app){
+    helper.defaultConfig = function(app){
         const { libs, dir } = app;
         try {
             const configFile = `${dir.current}/daily.email.config.sample.json`;
@@ -212,7 +230,7 @@ var helper = function(){
             return JSON.parse(configFileContent);
         }catch (e){
             console.log("Use default config, please read docs: https://github.com/indaam/send-email-by-commit")
-            return helper.defaulConfig(app);
+            return helper.defaultConfig(app);
         }
 
     }
