@@ -210,12 +210,45 @@ var helper = function(){
         return openWrapper + title + openTable + header + space + content + closeTable + credit + closeWrapper;
     }
 
+    helper.getGitEmail = function(app){
+        const { child_process } = app.libs;
+        const email = child_process.execSync('git config user.email');
+        return email.toString().trim();
+    }
+
+    helper.writeConfig = function(location, content, app){
+        const { fs } = app.libs;
+        try {
+            fs.writeFileSync(location, content, 'utf8');
+            return 1;
+        } catch (error) {
+            throw error
+        }
+    }
+
     helper.defaultConfig = function(app){
         const { libs, dir } = app;
         try {
-            const configFile = `${dir.current}/daily.email.config.sample.json`;
+            
+            const os = require("os");
+            const defaultConfigFileName = 'daily.email.config.sample.json';
+            const configFileName = 'daily.email.config.json';
+            const configFile = `${dir.current}/${defaultConfigFileName}`;
             const configFileContent = libs.fs.readFileSync(configFile, 'utf8');
-            return JSON.parse(configFileContent);
+            const username  = os.userInfo().username;
+            const email = helper.getGitEmail(app);
+
+            const defaultConfig = JSON.parse(configFileContent);
+
+            defaultConfig['git']['email'] = email || 'your.git.email@mail.com';
+            defaultConfig['email']['body']['name'] = username || 'your name';
+
+            const writeConfig = helper.writeConfig(`${dir.root}/${configFileName}`, JSON.stringify(defaultConfig, null, 2), app);
+
+            if(writeConfig){
+                return defaultConfig;
+            }
+            
         }catch (e){
             throw "Config not found, please read docs: https://github.com/indaam/send-email-by-commit";
         }

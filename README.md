@@ -117,6 +117,10 @@ It's not good & very dangerous, canot la send report like that. By defaulr, I fi
 * NEW git config `getFrom`, now can get email by day from now, default 1; Also you can set 'today' for just get from 00:00 to 23.59
 * Add new awesome template, `v1` : by Nana Maulana
 
+## Change log 1.0.5
+* Write default config on first run
+* Update log dir
+
 ## Base on Hastag
 By default this application grab all commit start from 00.00 to 24.00.
 Then maybe you want to just add commit base on hastag, sampe like this.

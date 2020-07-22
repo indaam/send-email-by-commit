@@ -27,7 +27,7 @@ const email = function(options){
             const content = (typeof this.data[names[i]] == "object" ? JSON.stringify(this.data[names[i]], null, 4) : this.data[names[i]] );
             logLocation.push(location);
             fs.writeFileSync( location, content);
-            console.log('Create Log ' + today + "." + names[i] );
+            console.log('Create Log ' + this.logDir + '/' + today + "." + names[i] );
         }
 
         if(openBrowser){
