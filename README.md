@@ -13,12 +13,11 @@ To install, On your root project, `yarn -D add send-email-by-commit`
 * npm & node
 
 ### Setup
-Copy [daily.email.config.sample.json](https://raw.githubusercontent.com/indaam/send-email-by-commit/master/daily.email.config.sample.json), then save as `daily.email.config.json` on root project.
-Then on `.gitignore` add
-```
-...
-daily.email.config.json
-```
+Just run `node ./node_modules/send-email-by-commit/index.js`, then the script will create config file `daily.email.config.json`;
+
+* By default, name on config is userInfo from os and
+* Email on git config from `git config user.email` 
+* on `.gitignore` dont forget to add `daily.email.config.json`
 
 # Run & send
 * To run, in terminal `node ./node_modules/send-email-by-commit/index.js`
