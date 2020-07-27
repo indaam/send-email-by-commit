@@ -231,6 +231,10 @@ var helper = function(){
         try {
             
             const os = require("os");
+            const pkg = require(dir.root + "/" + "package.json");
+            const pkgName = pkg["name"];
+            const name = pkgName.replace(/\-/g, ' ');
+
             const defaultConfigFileName = 'daily.email.config.sample.json';
             const configFileName = 'daily.email.config.json';
             const configFile = `${dir.current}/${defaultConfigFileName}`;
@@ -240,6 +244,7 @@ var helper = function(){
 
             const defaultConfig = JSON.parse(configFileContent);
 
+            defaultConfig['email']['body']['header']['project']['data'] = name || 'Awesome Project';
             defaultConfig['git']['email'] = email || 'your.git.email@mail.com';
             defaultConfig['email']['body']['name'] = username || 'your name';
 

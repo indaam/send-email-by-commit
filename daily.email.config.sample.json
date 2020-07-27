@@ -41,7 +41,7 @@
             "content": {
                 "taskAssigned": {
                     "title": "Task Assigned: ",
-                    "data": ["Project name"]
+                    "data": ["Task Assigned"]
                 },
                 "taskCompleted": {
                     "title": "Task Completed: ",
